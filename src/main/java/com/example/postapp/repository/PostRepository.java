@@ -15,7 +15,7 @@ public interface PostRepository extends JpaRepository<Post, Integer>, CustomPost
     // @Query("SELECT p FROM Post AS p WHERE p.title LIKE %:title% ")
     // List<Post> findAllByTitle(@Param("title") String titleStr);
 
-    // @Query("SELECT COUNT(p) FROM Post As p")
+    // @Query("SELECT COUNT(p) FROM Post AS p")
     // int getTotalCount();
 
     @Query("SELECT p FROM Post p JOIN p.files f WHERE index(f) = 0")
