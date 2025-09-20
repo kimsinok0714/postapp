@@ -46,6 +46,7 @@ public class Post {
     @ElementCollection
     @CollectionTable(name = "attachment", joinColumns = @JoinColumn(name = "post_id"))
     @OrderColumn(name = "order_index")
+    @Builder.Default
     private List<Attachment> files = new ArrayList<>();
 
     public void addFiles(Attachment attachment) {
