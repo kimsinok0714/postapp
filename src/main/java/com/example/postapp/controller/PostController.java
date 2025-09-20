@@ -36,7 +36,7 @@ public class PostController {
 
     // 게시글 등록
     @PostMapping("/posts")
-    public ResponseEntity<Map<String, Long>> putPost(@RequestBody PostDto postDto) {
+    public ResponseEntity<Map<String, Long>> postPost(@RequestBody PostDto postDto) {
 
         Long id = postService.registerPost(postDto);
 
