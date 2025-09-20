@@ -45,12 +45,8 @@ public class PostServiceImpl implements PostService {
     @Transactional(readOnly = false)
     @Override
     public Long registerPost(PostDto postDto) {
-
-        Post post = dtoToEntity(postDto);
-
-        postRepository.save(post);
-
-        return post.getId();
+        Post savedPost = postRepository.save(dtoToEntity(postDto));
+        return savedPost.getId();
     }
 
 
