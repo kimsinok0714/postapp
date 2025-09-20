@@ -3,21 +3,18 @@ package com.example.postapp.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.example.postapp.domain.Post;
 import com.example.postapp.dto.PageRequestDto;
 import com.example.postapp.dto.PageResponseDto;
 import com.example.postapp.dto.PostDto;
 import com.example.postapp.dto.PostSearchCondition;
 import com.example.postapp.repository.PostRepository;
-
 import lombok.RequiredArgsConstructor;
 
 
