@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/api/v1")
 @Slf4j
 public class PostController {
-
     // DI
     private final PostService postService;
 
@@ -43,7 +42,7 @@ public class PostController {
         log.info("id : {}", id);
 
         return new ResponseEntity<>(Map.of("id", id), HttpStatus.CREATED); // 201 상태 코드
-
+        // return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("id", id));
     }
 
 
