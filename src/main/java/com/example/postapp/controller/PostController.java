@@ -59,9 +59,10 @@ public class PostController {
 
 
     // 게시글 검색 및 게시글 목록 조회
-     @GetMapping("/posts")
+    @GetMapping("/posts")
     public ResponseEntity<PageResponseDto<PostDto>> search(
-            @RequestParam Map<String, String> params,
+            @RequestParam(required = false, defaultValue = "") String keyfield,    
+            @RequestParam(required = false, defaultValue = "") String keyword,       
             PageRequestDto pageRequestDto) {
 
         log.info("page: {}, size: {}, params: {}", 
@@ -69,16 +70,19 @@ public class PostController {
 
         PostSearchCondition condition = new PostSearchCondition();
 
-        // 효율적인 검색 조건: Map을 활용하여 동적으로 조건을 처리
-        if (params.containsKey("title") && params.get("title") != null) {
-            condition.setTitle(params.get("title"));
-        }
-        if (params.containsKey("contents") && params.get("title") != null) {
-            condition.setContents(params.get("contents"));
-        }
-        if (params.containsKey("writer") && params.get("title") != null) {
-            condition.setWriter(params.get("writer"));
-        }
+      
+        switch(keyword) {
+            case "title":
+                condition.setTitle(keyword);
+                break;
+            case "writer":
+                condition.setWriter(keyword);
+                break;
+            case "contents":
+                condition.setContents(keyword);
+                break;
+        }        
+                
 
         PageResponseDto<PostDto> result = postService.search(condition, pageRequestDto);
 
