@@ -44,33 +44,49 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
     public Page<Post> search(PostSearchCondition condition, Pageable pageable) {
 
         // condition이 모두 null이면 전체 게시글 목록 조회
+       if (condition.getTitle() == null && condition.getWriter() == null && condition.getContents() == null ) {     
+           
+            // //페이지 번호에 해당하는 게시글 목록 조회             
+            // List<Post> posts = jpaQueryFactory.selectFrom(post)
+            //     .orderBy(post.id.desc())
+            //     .offset((long) pageable.getPageNumber() * pageable.getPageSize())
+            //     .limit(pageable.getPageSize())
+            //     .fetch();
+
+            // long totalCount = jpaQueryFactory.selectFrom(post)
+            //     .fetchCount();
+
+            // return PageableExecutionUtils.getPage(posts, pageable, () -> totalCount);            
+
+        } else {
+            
+           // 게시글 목록 조회 (데이터 조회)
+            List<Post> posts = jpaQueryFactory.selectFrom(post)
+                .where(
+                    writerLike(condition.getWriter()),  // 조건이 null이 아닌 경우에만 쿼리에 포함됩니다. AND 조건
+                    titleLike(condition.getTitle()),
+                    contentsLike(condition.getContents())
+                )
+                .orderBy(post.id.desc())
+                .offset((long) pageable.getPageNumber() * pageable.getPageSize())  
+                .limit(pageable.getPageSize())
+                .fetch();
+
+
+            // 총 게시글 수 조회
+            long totalCount = jpaQueryFactory.selectFrom(post)
+                .where(
+                    writerLike(condition.getWriter())
+                        .and(titleLike(condition.getTitle()))
+                        .and(contentsLike(condition.getContents()))
+                )
+                .fetchCount();
+
+            return PageableExecutionUtils.getPage(posts, pageable, () -> totalCount);
+
+        }
         
-        // 데이터 조회
-        List<Post> posts = jpaQueryFactory.selectFrom(post)
-                                          .where(writerLike(condition.getWriter()) ,
-                                                 contentsLike(condition.getContents()) ,
-                                                 titleLike(condition.getTitle()))
-                                          .orderBy(post.id.desc())
-                                          .offset(pageable.getPageNumber() * pageable.getPageSize())
-                                          .limit(pageable.getPageSize())
-                                          .fetch();
-
-
-        // 총 데이터 갯수    
-        long total = jpaQueryFactory.selectFrom(post)
-                                    .where(writerLike(condition.getWriter()) ,
-                                           contentsLike(condition.getContents()) ,
-                                           titleLike(condition.getTitle()))
-                                    .fetchCount();
-
-        
-        return PageableExecutionUtils.getPage(posts, pageable, () -> {
-            return total;
-        });
-
-        //return new PageImpl<>(posts, pageable, total);
-
-        
+        //return new PageImpl<>(posts, pageable, total);        
     }
 
 
