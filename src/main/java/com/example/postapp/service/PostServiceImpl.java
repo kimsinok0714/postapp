@@ -74,26 +74,23 @@ public class PostServiceImpl implements PostService {
     }
 
 
-
     @Override
     public PageResponseDto<PostDto> search(PostSearchCondition condition, PageRequestDto pageRequestDto) {
 
-        // 페이지 번호는 0부터 시작
-        Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1, pageRequestDto.getSize());
-        
+        // Spring Data JPA에서 페이징과 정렬을 처리하기 위해서 사용 : 요청한 페이지 번호, 사이즈 (페이지당 게시글 수)
+        Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1 , pageRequestDto.getSize(), Sort.by("id").descending());
+
+        // Page<T>는 Spring Data에서 페이징 처리 결과를 담는 객체입니다.
+        // 내부적으로 전체 데이터 개수, 현재 페이지의 데이터 목록, 페이지 정보 등을 포함합니다.
         Page<Post> page = postRepository.search(condition, pageable);
         
+        List<PostDto> posts = page.get().map(this::entityToDto).collect(Collectors.toList());
 
-        List<PostDto> posts = page.get().map(post -> entityToDto(post)).collect(Collectors.toList());
-    
         return PageResponseDto.<PostDto>builder()
             .dtoList(posts)
             .pageRequestDto(pageRequestDto)
-            .totalCount(page.getTotalElements())
+            .totalCount(0)
             .build();
-
-    }
-
-    
+    }    
 
 }
