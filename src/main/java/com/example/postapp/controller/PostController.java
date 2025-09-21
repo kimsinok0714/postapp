@@ -59,39 +59,32 @@ public class PostController {
 
 
     // 게시글 검색 및 게시글 목록 조회
-    @GetMapping("/posts")       
-    public ResponseEntity<PageResponseDto<PostDto>> search(@RequestParam(value = "keyfield",required = false) String keyfield,
-                                                           @RequestParam(value="keyword", required = false) String keyword,
-                                                           PageRequestDto pageRequestDto) {
+     @GetMapping("/posts")
+    public ResponseEntity<PageResponseDto<PostDto>> search(
+            @RequestParam Map<String, String> params,
+            PageRequestDto pageRequestDto) {
 
-        log.info("page : {}, size : {}, keyfield : {}, keyword : {}", pageRequestDto.getPage(), pageRequestDto.getSize(), keyfield, keyword);
+        log.info("page: {}, size: {}, params: {}", 
+                pageRequestDto.getPage(), pageRequestDto.getSize(), params);
 
         PostSearchCondition condition = new PostSearchCondition();
 
-        if (!keyfield.equals("") && !keyword.equals("")) {
-            
-            if (keyfield.equals("title")) {
-
-                condition.setTitle(keyword);
-    
-            } else if (keyfield.equals("contents")) {
-    
-                condition.setContents(keyword);
-    
-            } else if (keyfield.equals("writer")) {
-    
-                condition.setWriter(keyword);
-    
-            }
+        // 효율적인 검색 조건: Map을 활용하여 동적으로 조건을 처리
+        if (params.containsKey("title") && params.get("title") != null) {
+            condition.setTitle(params.get("title"));
         }
-       
+        if (params.containsKey("contents") && params.get("title") != null) {
+            condition.setContents(params.get("contents"));
+        }
+        if (params.containsKey("writer") && params.get("title") != null) {
+            condition.setWriter(params.get("writer"));
+        }
 
+        PageResponseDto<PostDto> result = postService.search(condition, pageRequestDto);
 
-        PageResponseDto<PostDto> result = postService.search(condition, pageRequestDto);                                                            
-
-        return new ResponseEntity<>(result, HttpStatus.OK);
-
+        return ResponseEntity.ok(result);
     }
+
 
 
     // 게시글 상세조회
