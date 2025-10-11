@@ -18,6 +18,9 @@ public interface PostRepository extends JpaRepository<Post, Integer>, CustomPost
     // @Query("SELECT COUNT(p) FROM Post AS p")
     // int getTotalCount();
 
+    // index : JPQL 표준 함수, List나 Map에 대해 순서, 키를 기준으로 필터링할 수 있도록 지원한다. 
+    // index 함수는 @ElementCollection, @OrderColumn이 붙은 List 타입 필드에서만 사용 가능
+    // @Query("SELECT p FROM Post p JOIN p.files f ORDER BY index(f)")
     @Query("SELECT p FROM Post p JOIN p.files f WHERE index(f) = 0")
     List<Post> findAlls();
 
