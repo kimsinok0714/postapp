@@ -24,8 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
-    
-   
+       
 
     @Override
     public PostDto retrievePost(Long id) {
@@ -51,27 +50,28 @@ public class PostServiceImpl implements PostService {
     // 게시글 목록 조회 (페이징)
     @Override    
     public PageResponseDto<PostDto> paging(PageRequestDto pageRequestDto) {
+        
+        // Spring Data JPA에서 페이징 처리를 하기 위해 Pageable 객체를 생성한다.
+        Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1,  // 페이지 번호가 0 부터 시작
+                                           pageRequestDto.getSize(),
+                                           Sort.by("id").descending());
+        
 
-        Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1,
-                pageRequestDto.getSize(),
-                Sort.by("id").descending());
-
+        // SELECT * FROM post ORDER BY id DESC LIMIT ? OFFSET ?; SQL문을 생성한다.
+        // Page : 단순히 게시글 목록 뿐만 아니라 전체 게시글 수, 전체 페이지 수 등 페이징 메타 데이터를 포함한다. 
         Page<Post> page = postRepository.findAll(pageable);
 
-        // List<Post> posts = page.getContent();
-
-        // List<PostDto> posts = page.getContent().stream().map(post ->
-        // entityToDto(post)).collect(Collectors.toList());
-        List<PostDto> posts = page.get().map(post -> entityToDto(post)).collect(Collectors.toList());
-
-        long totalCount = page.getTotalElements();
+        // List<Post> posts = page.getContent();  // 현재 페이지의 게시글 목록을 구한다.
+        
+        List<PostDto> posts = page.getContent().stream.map(post -> entityToDto(post)).collect(Collectors.toList());
+        
+        long totalCount = page.getTotalElements();  // 총 게시글 수
 
         return PageResponseDto.<PostDto>builder()
-                .dtoList(posts)
-                .pageRequestDto(pageRequestDto)
-                .totalCount(totalCount)
-                .build();
-
+                    .dtoList(posts)
+                    .pageRequestDto(pageRequestDto)
+                    .totalCount(totalCount)
+                    .build();
     }
 
 
