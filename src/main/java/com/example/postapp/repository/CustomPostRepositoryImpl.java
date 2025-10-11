@@ -1,9 +1,7 @@
 package com.example.postapp.repository;
 
 
-
 import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -28,16 +26,25 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
     //Q 클래스
     private  QPost post = QPost.post;
 
-
     private final JPAQueryFactory jpaQueryFactory;
 
     // 중요
     public CustomPostRepositoryImpl(EntityManager em) {
-
         this.jpaQueryFactory = new JPAQueryFactory(em);
-
     }
 
+    
+    // 페이징 처리
+    @Override
+    public List<Post> paging(PageRequestDto pageRequestDto) {
+
+        String qlString = "SELECT p FROM Post As p ORDER BY p.id DESC";
+
+        return em.createQuery(qlString, Post.class)
+                .setFirstResult((pageRequestDto.getPage() - 1) * pageRequestDto.getSize())
+                .setMaxResults(pageRequestDto.getSize())
+                .getResultList();
+    }
 
     // 게시글 검색 
     @Override
@@ -162,21 +169,6 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
                 .getResultList();
     }
 
-
-    @Override
-    public List<Post> paging(PageRequestDto pageRequestDto) {
-
-        String qlString = "SELECT p FROM Post As p ORDER BY p.id DESC";
-
-        return em.createQuery(qlString, Post.class)
-                .setFirstResult((pageRequestDto.getPage() - 1) * pageRequestDto.getSize())
-                .setMaxResults(pageRequestDto.getSize())
-                .getResultList();
-    }
-
-
-
-  
 
 
 }
