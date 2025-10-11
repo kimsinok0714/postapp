@@ -49,57 +49,55 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
     
     // 게시글 검색 및 페이징 처리
     @Override
-    public Page<Post> search(PostSearchCondition condition, Pageable pageable) {
+    public Page<Post> search(PostSearchCondition condition, Pageable pageable) {  // title, writer, contents
 
         // condition이 모두 null이면 전체 게시글 목록 조회
        if (condition.getTitle() == null && condition.getWriter() == null && condition.getContents() == null ) {     
            
             // //페이지 번호에 해당하는 게시글 목록 조회             
-            // List<Post> posts = jpaQueryFactory.selectFrom(post)
-            //     .orderBy(post.id.desc())
-            //     .offset((long) pageable.getPageNumber() * pageable.getPageSize())
-            //     .limit(pageable.getPageSize())
-            //     .fetch();
+            List<Post> posts = jpaQueryFactory.selectFrom(post)
+                                               .orderBy(post.id.desc())
+                                                .offset((long) pageable.getPageNumber() * pageable.getPageSize())
+                                                .limit(pageable.getPageSize())
+                                                .fetch();
 
-            // long totalCount = jpaQueryFactory.selectFrom(post)
-            //     .fetchCount();
+            long totalCount = jpaQueryFactory.selectFrom(post)
+                                                .fetchCount();
 
-            // return PageableExecutionUtils.getPage(posts, pageable, () -> totalCount);            
+            return PageableExecutionUtils.getPage(posts, pageable, () -> totalCount);            
 
         } else {
             
            // 게시글 목록 조회 (데이터 조회)
             List<Post> posts = jpaQueryFactory.selectFrom(post)
-                .where(
-                    writerLike(condition.getWriter()),  // 조건이 null이 아닌 경우에만 쿼리에 포함됩니다. AND 조건
-                    titleLike(condition.getTitle()),
-                    contentsLike(condition.getContents())
-                )
-                .orderBy(post.id.desc())
-                .offset((long) pageable.getPageNumber() * pageable.getPageSize())  
-                .limit(pageable.getPageSize())
-                .fetch();
+                                                .where(
+                                                    writerLike(condition.getWriter()),  // 조건이 null이 아닌 경우에만 쿼리에 포함됩니다. AND 조건
+                                                    titleLike(condition.getTitle()),
+                                                    contentsLike(condition.getContents())
+                                                )
+                                                .orderBy(post.id.desc())
+                                                .offset((long) pageable.getPageNumber() * pageable.getPageSize())  
+                                                .limit(pageable.getPageSize())
+                                                .fetch();
 
 
             // 총 게시글 수 조회
             long totalCount = jpaQueryFactory.selectFrom(post)
-                .where(
-                    writerLike(condition.getWriter())
-                        .and(titleLike(condition.getTitle()))
-                        .and(contentsLike(condition.getContents()))
-                )
-                .fetchCount();
+                                                .where(
+                                                    writerLike(condition.getWriter())     // 조건이 null이 아닌 경우에만 쿼리에 포함됩니다. AND 조건
+                                                    .and(titleLike(condition.getTitle()))
+                                                    .and(contentsLike(condition.getContents()))
+                                                )
+                                                .fetchCount();
 
-            return PageableExecutionUtils.getPage(posts, pageable, () -> totalCount);
-
+           return PageableExecutionUtils.getPage(posts, pageable, () -> totalCount);
         }
         
         //return new PageImpl<>(posts, pageable, total);        
     }
 
-
-    
-
+   
+    // 동적 쿼리
     private BooleanExpression writerLike(String writer) {
 
         return writer == null ? null : post.writer.like("%" + writer + "%");
@@ -120,7 +118,6 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
 
 
 
-
     @Override
     public List<Object[]> findAllByTitle1(String titleStr) {
 
@@ -128,9 +125,8 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
 
         @SuppressWarnings("unchecked")
         List<Object[]> posts = em.createQuery(qlString)
-                .setParameter("title", "%" + titleStr + "%")
-                .getResultList();
-
+                                 .setParameter("title", "%" + titleStr + "%")
+                                 .getResultList();
         return posts;
     }
 
@@ -141,9 +137,8 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
         String qlString = "SELECT p FROM Post AS p WHERE p.title LIKE :title";
 
         List<Post> posts = em.createQuery(qlString, Post.class)
-                .setParameter("title", "%" + titleStr + "%")
-                .getResultList();
-
+                             .setParameter("title", "%" + titleStr + "%")
+                             .getResultList();
         return posts;
     }
 
@@ -155,7 +150,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
         String qlString = "SELECT COUNT(p) FROM Post AS p";
 
         return em.createQuery(qlString, Long.class)
-                .getSingleResult().longValue();
+                 .getSingleResult().longValue();
 
     }
 
@@ -169,7 +164,6 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
         return em.createQuery(qlString)
                 .getResultList();
     }
-
 
 
 }
