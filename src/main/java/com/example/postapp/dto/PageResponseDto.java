@@ -26,8 +26,9 @@ public class PageResponseDto<T> {
 
     private List<Integer> pageNumList = new ArrayList<>();
 
-
-    @Builder
+    // 해당 클래스나 생성자, 메서드에 붙이면 빌더 패턴(Builder Pattern) 코드를 자동 생성해줍니다.
+    // PageResponseDto.<PostDto>builder().dtoList(?).pageRequestDto(?).totalCount(?).builder()  사용한다.
+    @Builder 
     public PageResponseDto(List<T> dtoList, PageRequestDto pageRequestDto, long totalCount) {
 
         this.dtoList = dtoList;
