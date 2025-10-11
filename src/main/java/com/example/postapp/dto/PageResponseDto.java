@@ -27,7 +27,7 @@ public class PageResponseDto<T> {
     private List<Integer> pageNumList = new ArrayList<>();
 
     // 해당 클래스나 생성자, 메서드에 붙이면 빌더 패턴(Builder Pattern) 코드를 자동 생성해줍니다.
-    // PageResponseDto.<PostDto>builder().dtoList(?).pageRequestDto(?).totalCount(?).builder()  사용한다.
+    // PageResponseDto.<PostDto>builder().dtoList(?).pageRequestDto(?).totalCount(?).builder() 사용한다.
     @Builder 
     public PageResponseDto(List<T> dtoList, PageRequestDto pageRequestDto, long totalCount) {
 
@@ -37,9 +37,8 @@ public class PageResponseDto<T> {
         this.currentPage = pageRequestDto.getPage();
 
         // 현재 페이지 번호가 속한 페이지 블록의 끝 페이지 번호 계산
-        int end = (int) (Math.ceil(pageRequestDto.getPage() / (double) pageSize)) * pageSize;  
+        int end = (int) (Math.ceil(pageRequestDto.getPage() / (double) pageSize)) * pageSize;    // 페이지 블록 수
 
-        
         // 현재 페이지 번호가 속한 페이지 블록의 시작 페이지 번호 계산
         int start = end - (pageSize - 1);    
 
@@ -57,10 +56,11 @@ public class PageResponseDto<T> {
         // 다음 페이지 블록의 존재하는 조건 : 총 게시글 수 > (현재 블록의 마지막 페이지 번호 × 한 페이지당 게시글 수)
         next = totalCount > (end * pageRequestDto.getSize());
 
+        //페이지네이션(page number list) 생성 : IntStream -> Stream<Integer> -> List<Integer>
         pageNumList = IntStream.range(start, end + 1).boxed().collect(Collectors.toList());  
 
-        // 이전 페이지 블록의 마지막 페이지 번호 계산 (이전 페이지 블록이 없으면 0 설정)
-        // 다음 페이지 블록의 첫 페이지 번호 계산 (다음 페이지 블록이 없으면 0 설정)        
+        // 이전 페이지 블록의 마지막 페이지 번호 계산 (이전 페이지 블록이 존재하지 않으면 0 설정)
+        // 다음 페이지 블록의 첫 페이지 번호 계산 (다음 페이지 블록이 존재하지 않으면 0 설정)        
         prevPage = prev ? start - 1 : 0;  
 
         nextPage = next ? end + 1 : 0;
