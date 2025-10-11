@@ -46,7 +46,8 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
                 .getResultList();
     }
 
-    // 게시글 검색 
+    
+    // 게시글 검색 및 페이징 처리
     @Override
     public Page<Post> search(PostSearchCondition condition, Pageable pageable) {
 
