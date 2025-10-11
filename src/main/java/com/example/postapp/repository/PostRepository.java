@@ -21,7 +21,7 @@ public interface PostRepository extends JpaRepository<Post, Integer>, CustomPost
     // index : JPQL 표준 함수, List나 Map에 대해 순서, 키를 기준으로 필터링할 수 있도록 지원한다. 
     // index 함수는 @ElementCollection, @OrderColumn이 붙은 List 타입 필드에서만 사용 가능
     // @Query("SELECT p FROM Post p JOIN p.files f ORDER BY index(f)")
-    @Query("SELECT p FROM Post p JOIN p.files f WHERE index(f) = 0")
+    @Query("SELECT p FROM Post p JOIN p.files f WHERE index(f) = 0")   // p 엔티티를 통해서 연관 관계에 있는 files 엔티티를 찹조한다.
     List<Post> findAlls();
 
     @Query("SELECT SIZE(p.files) FROM Post p WHERE p.id = :id")
