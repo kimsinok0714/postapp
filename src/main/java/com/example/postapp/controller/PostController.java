@@ -2,22 +2,18 @@ package com.example.postapp.controller;
 
 import java.net.http.HttpResponse;
 import java.util.Map;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.postapp.dto.PageRequestDto;
 import com.example.postapp.dto.PageResponseDto;
 import com.example.postapp.dto.PostDto;
 import com.example.postapp.dto.PostSearchCondition;
 import com.example.postapp.service.PostService;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -63,7 +59,7 @@ public class PostController {
     public ResponseEntity<PageResponseDto<PostDto>> search(
             @RequestParam(required = false, defaultValue = "") String keyfield,    
             @RequestParam(required = false, defaultValue = "") String keyword,       
-            PageRequestDto pageRequestDto) {
+            PageRequestDto pageRequestDto) {  // page (현재 페이지 번호),   size (페이지당 게시글 수)
 
         log.info("page: {}, size: {}, params: {}", 
                 pageRequestDto.getPage(), pageRequestDto.getSize(), params);
