@@ -61,12 +61,9 @@ public class PostController {
             @RequestParam(required = false, defaultValue = "") String keyword,       
             PageRequestDto pageRequestDto) {  // page (현재 페이지 번호),   size (페이지당 게시글 수)
 
-        log.info("page: {}, size: {}, params: {}", 
-                pageRequestDto.getPage(), pageRequestDto.getSize(), params);
+        log.info("page: {}, size: {}, params: {}", pageRequestDto.getPage(), pageRequestDto.getSize(), params);
 
-        PostSearchCondition condition = new PostSearchCondition();
-
-      
+        PostSearchCondition condition = new PostSearchCondition();      
         switch(keyword) {
             case "title":
                 condition.setTitle(keyword);
@@ -79,7 +76,6 @@ public class PostController {
                 break;
         }        
                 
-
         PageResponseDto<PostDto> result = postService.search(condition, pageRequestDto);
 
         return ResponseEntity.ok(result);
