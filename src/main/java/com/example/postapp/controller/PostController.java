@@ -42,16 +42,16 @@ public class PostController {
     }
 
 
-    // // 게시글 목록 조회 (페이징 처리)
-    // @GetMapping("/posts")
-    // public ResponseEntity<PageResponseDto<PostDto>> getPosts(PageRequestDto pageRequestDto) {
+    // 게시글 목록 조회 (페이징 처리)
+    @GetMapping("/posts")
+    public ResponseEntity<PageResponseDto<PostDto>> getPosts(PageRequestDto pageRequestDto) {  // page (현재 페이지 번호),   size (페이지당 게시글 수)
 
-    //     log.info("page : {}, size : {}", pageRequestDto.getPage(), pageRequestDto.getSize());
+        log.info("page : {}, size : {}", pageRequestDto.getPage(), pageRequestDto.getSize());
 
-    //     PageResponseDto<PostDto> result = postService.paging(pageRequestDto);
+        PageResponseDto<PostDto> result = postService.paging(pageRequestDto);
 
-    //     return new ResponseEntity<>(result, HttpStatus.OK);
-    // }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 
 
     // 게시글 검색 및 게시글 목록 조회
