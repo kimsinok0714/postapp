@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PageRequestDto {
-
+    // 기본값이 빌더에 의해 무시되지 않도록 보장
     @Builder.Default
     private int page = 1;
 
