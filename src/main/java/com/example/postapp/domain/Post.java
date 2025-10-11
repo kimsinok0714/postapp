@@ -3,7 +3,6 @@ package com.example.postapp.domain;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -43,6 +42,7 @@ public class Post {
     @Column(name = "reg_date", nullable = false)
     private LocalDateTime regDate;
 
+    // 1 : N 관계
     @ElementCollection
     @CollectionTable(name = "attachment", joinColumns = @JoinColumn(name = "post_id"))
     @OrderColumn(name = "order_index")
@@ -53,9 +53,10 @@ public class Post {
         files.add(attachment);
     }
 
+    // 이 메서드는 엔티티가 persist() 또는 save() 되기 직전에 자동 호출됩니다.
     // @PrePersist
     // public void prePersist() {
-    // this.regDate = this.regDate == null ? LocalDateTime.now() : this.regDate;
+    //       this.regDate = this.regDate == null ? LocalDateTime.now() : this.regDate;
     // }
 
     // 비즈니스 메소드
