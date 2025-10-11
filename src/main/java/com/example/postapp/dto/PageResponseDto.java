@@ -14,7 +14,7 @@ public class PageResponseDto<T> {
 
     private List<T> dtoList;
 
-    private PageRequestDto pageRequestDto;
+    private PageRequestDto pageRequestDto;   // page, size
 
     private long totalCount; // 총 게시글 수
 
