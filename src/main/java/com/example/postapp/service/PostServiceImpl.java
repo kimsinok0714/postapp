@@ -66,11 +66,13 @@ public class PostServiceImpl implements PostService {
         // Page : 단순히 게시글 목록 뿐만 아니라 전체 게시글 수, 전체 페이지 수 등 페이징 메타 데이터를 포함한다. 
         Page<Post> page = postRepository.findAll(pageable);
 
-        // List<Post> posts = page.getContent();  // 현재 페이지의 게시글 목록을 구한다.
+        // List<Post> posts = page.getContent();  // 게시글 목록을 구한다.
         
         List<PostDto> posts = page.getContent().stream.map(post -> entityToDto(post)).collect(Collectors.toList());
+        //List<PostDto> posts = page.getContent().stream.map(this::entityToDto).collect(Collectors.toList());
         
-        long totalCount = page.getTotalElements();  // 총 게시글 수
+        
+        long totalCount = page.getTotalElements();  // 전체 게시글 수
 
         return PageResponseDto.<PostDto>builder()
                                 .dtoList(posts)
