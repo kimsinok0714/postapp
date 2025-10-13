@@ -24,6 +24,9 @@ public interface PostRepository extends JpaRepository<Post, Integer>, CustomPost
     @Query("SELECT p FROM Post p JOIN p.files f WHERE index(f) = 0")   // p 엔티티를 통해서 연관 관계에 있는 files 엔티티를 찹조한다.
     List<Post> findAlls();
 
+    // @Query("SELECT f FROM Post p JOIN p.files f WHERE p.id = :postId AND index(f) = 0")
+    // File findFirstFileByPostId(@Param("postId") Long postId);
+
     @Query("SELECT SIZE(p.files) FROM Post p WHERE p.id = :id")
     int getFileCount(@Param(value = "id") long id);
 
