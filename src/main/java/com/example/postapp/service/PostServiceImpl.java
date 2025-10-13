@@ -32,9 +32,14 @@ public class PostServiceImpl implements PostService {
         Optional<Post> result = postRepository.findById((int)id.longValue());
 
         // Optional이 비어 있으면 예외를 던지고, 값이 있으면 그 값을 반환한다.
-        Post post = result.orElseThrow(() -> new IllegalStateException(id + " 번호에 해당하는 개시글이 없습니다."));
+        // Post post = result.orElseThrow(() -> new IllegalStateException(id + " 번호에 해당하는 개시글이 없습니다."));
+        // return entityToDto(post);
+        
+        return postRepository.findById(id)
+            .map(this::entityToDto)
+            .orElseThrow(() -> new IllegalStateException(id + " 번호에 해당하는 개시글이 없습니다."));
 
-        return entityToDto(post);
+       
     }
 
 
