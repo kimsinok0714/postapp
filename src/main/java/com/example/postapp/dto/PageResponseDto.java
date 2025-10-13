@@ -53,7 +53,7 @@ public class PageResponseDto<T> {
         // 이전/다음 페이지 블록 존재 여부
         prev = start > 1;
 
-        // 다음 페이지 블록의 존재하는 조건 : 총 게시글 수 > (현재 블록의 마지막 페이지 번호 × 한 페이지당 게시글 수)
+        // 다음 페이지 블록의 존재하는 조건 : 총 게시글 수 > (현재 페이지 번호가 속한 페이지 블록의 끝 페이지 번호 × 한 페이지당 게시글 수)
         next = totalCount > (end * pageRequestDto.getSize());
 
         //페이지네이션(page number list) 생성 : IntStream -> Stream<Integer> -> List<Integer>
@@ -63,8 +63,7 @@ public class PageResponseDto<T> {
         // 다음 페이지 블록의 첫 페이지 번호 계산 (다음 페이지 블록이 존재하지 않으면 0 설정)        
         prevPage = prev ? start - 1 : 0;  
 
-        nextPage = next ? end + 1 : 0;
-
+        nextPage = next ? end + 1 : 0;       
 
     }
 
