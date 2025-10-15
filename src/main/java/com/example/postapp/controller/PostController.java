@@ -64,15 +64,15 @@ public class PostController {
         log.info("page: {}, size: {}, params: {}", pageRequestDto.getPage(), pageRequestDto.getSize(), params);
 
         PostSearchCondition condition = new PostSearchCondition();      
-        switch(keyword) {
+        switch(keyfield) {
             case "title":
-                condition.setTitle(keyword);
+                condition.setTitle(keyfield);
                 break;
             case "writer":
-                condition.setWriter(keyword);
+                condition.setWriter(keyfield);
                 break;
             case "contents":
-                condition.setContents(keyword);
+                condition.setContents(keyfield);
                 break;
         }        
                 
