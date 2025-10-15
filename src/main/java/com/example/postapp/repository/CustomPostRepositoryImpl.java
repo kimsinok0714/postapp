@@ -57,7 +57,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
             // //페이지 번호에 해당하는 게시글 목록 조회             
             List<Post> posts = jpaQueryFactory.selectFrom(post)
                                                .orderBy(post.id.desc())
-                                                .offset((long) pageable.getPageNumber() * pageable.getPageSize())
+                                                .offset((long) pageable.getPageNumber() * pageable.getPageSize())   // pageable.getPageNumber() : 0부터 
                                                 .limit(pageable.getPageSize())
                                                 .fetch();
 
