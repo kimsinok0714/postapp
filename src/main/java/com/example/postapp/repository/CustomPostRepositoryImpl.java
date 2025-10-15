@@ -19,13 +19,18 @@ import jakarta.persistence.PersistenceContext;
 
 @Repository
 public class CustomPostRepositoryImpl implements CustomPostRepository {
-
+    
+    // JPA 에서 EntityManager를 주입(Inject)하기 위해 사용하는 어노테이션(annotation)입니다.
     @PersistenceContext
     private EntityManager em;
 
-    //Q 클래스
+    // Q 클래스    
+	// Post Entity에 대한 메타데이터를 포함한 자동 생성된 클래스를 의미한다.	
     private  QPost post = QPost.post;
 
+    // JPAQueryFactory 클래스: QueryDSL 쿼리 생성 및 실행 도구 (핵심 클래스)
+	// JPA를 사용하는 애플리케이션에서 타입 안전(Type-Safe)한 쿼리를 생성하고 실행할 수 있도록 도와줍니다.
+	// 타입 안전성: 컴파일 시점에 쿼리의 문법 오류를 잡아낼 수 있어 런타임 오류를 줄일 수 있습니다.
     private final JPAQueryFactory jpaQueryFactory;
 
     // 중요
