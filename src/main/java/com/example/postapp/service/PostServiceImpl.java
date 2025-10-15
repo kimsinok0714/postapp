@@ -94,10 +94,12 @@ public class PostServiceImpl implements PostService {
         
         List<PostDto> posts = page.get().map(this::entityToDto).collect(Collectors.toList());
 
+        long totalCount = page.getTotalElements();  // 전체 게시글 수
+
         return PageResponseDto.<PostDto>builder()
                                 .dtoList(posts)
                                 .pageRequestDto(pageRequestDto)
-                                .totalCount(0)
+                                .totalCount(totalCount)
                                 .build();
     }    
 
