@@ -66,8 +66,14 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
                                               .limit(pageable.getPageSize())
                                               .fetch();
 
-            long totalCount = jpaQueryFactory.selectFrom(post)
-                                             .fetchCount();
+				
+		    long totalCount = jpaQueryFactory.select(post.count())   // 카운트 쿼리 (join 없이 최적화)
+					                         .from(post)
+			   		                         .fetchOne();
+
+		   
+            // long totalCount = jpaQueryFactory.selectFrom(post)
+            //                                  .fetchCount();
 
             return PageableExecutionUtils.getPage(posts, pageable, () -> totalCount);            
 
@@ -87,13 +93,22 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
 
 
             // 총 게시글 수 조회
-            long totalCount = jpaQueryFactory.selectFrom(post)
-                                                .where(
+		    long totalCount = jpaQueryFactory.select(post.count())
+				                             .from(post)
+                                             .where(
                                                     writerLike(condition.getWriter())     // 조건이 null이 아닌 경우에만 쿼리에 포함됩니다. AND 조건
                                                     .and(titleLike(condition.getTitle()))
                                                     .and(contentsLike(condition.getContents()))
-                                                )
-                                                .fetchCount();
+                                              )
+                                              .fetchOne();
+		   
+            // long totalCount = jpaQueryFactory.selectFrom(post)
+            //                                     .where(
+            //                                         writerLike(condition.getWriter())     // 조건이 null이 아닌 경우에만 쿼리에 포함됩니다. AND 조건
+            //                                         .and(titleLike(condition.getTitle()))
+            //                                         .and(contentsLike(condition.getContents()))
+            //                                     )
+            //                                     .fetchCount();
 
            return PageableExecutionUtils.getPage(posts, pageable, () -> totalCount);
         }
