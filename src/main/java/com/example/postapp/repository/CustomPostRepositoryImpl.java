@@ -56,13 +56,13 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
            
             // //페이지 번호에 해당하는 게시글 목록 조회             
             List<Post> posts = jpaQueryFactory.selectFrom(post)
-                                               .orderBy(post.id.desc())
-                                                .offset((long) pageable.getPageNumber() * pageable.getPageSize())   // pageable.getPageNumber() : 0부터 
-                                                .limit(pageable.getPageSize())
-                                                .fetch();
+                                              .orderBy(post.id.desc())
+                                              .offset((long) pageable.getPageNumber() * pageable.getPageSize())   // pageable.getPageNumber() : 0부터 
+                                              .limit(pageable.getPageSize())
+                                              .fetch();
 
             long totalCount = jpaQueryFactory.selectFrom(post)
-                                                .fetchCount();
+                                             .fetchCount();
 
             return PageableExecutionUtils.getPage(posts, pageable, () -> totalCount);            
 
@@ -76,7 +76,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
                                                     contentsLike(condition.getContents())
                                                 )
                                                 .orderBy(post.id.desc())
-                                                .offset((long) pageable.getPageNumber() * pageable.getPageSize())  
+                                                .offset((long) pageable.getPageNumber() * pageable.getPageSize())  // pageable.getPageNumber() : 0부터  시작
                                                 .limit(pageable.getPageSize())
                                                 .fetch();
 
@@ -115,7 +115,6 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
         return title == null ? null : post.title.like("%" + title + "%");
 
     }
-
 
 
     @Override
